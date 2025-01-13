@@ -11,9 +11,9 @@ class JankenpoGame {
             return "Draw"
         }
         return when (player1) {
-            Move.ROCK -> if (player2 == Move.SCISSORS) "Player 1 wins" else "Computer wins"
-            Move.PAPER -> if (player2 == Move.ROCK) "Player 1 wins" else "Computer wins"
-            Move.SCISSORS -> if (player2 == Move.PAPER) "Player 1 wins" else "Computer wins"
+            Move.ROCK -> if (player2 == Move.SCISSORS) "You win" else "Computer wins"
+            Move.PAPER -> if (player2 == Move.ROCK) "You win" else "Computer wins"
+            Move.SCISSORS -> if (player2 == Move.PAPER) "You win" else "Computer wins"
         }
     }
 }
