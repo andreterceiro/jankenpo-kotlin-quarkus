@@ -8,7 +8,7 @@ import io.quarkus.qute.Template
 import io.quarkus.qute.TemplateInstance
 import com.example.model.Jankenpo
 
-@Path("/jankenpo")
+@Path("/")
 class JankenpoResource {
 
     @Inject
@@ -18,7 +18,6 @@ class JankenpoResource {
     lateinit var form: Template
 
     @GET
-    @Path("/play")
     @Produces(MediaType.TEXT_HTML)
     fun play(@QueryParam("playerMove") playerMove: String?): TemplateInstance {
         var error = ""
