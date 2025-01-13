@@ -1,6 +1,8 @@
-package com.example
+package com.example.model
+import jakarta.enterprise.context.ApplicationScoped;
 
-class JankenpoGame {
+@ApplicationScoped
+class Jankenpo {
 
     enum class Move {
         ROCK, PAPER, SCISSORS

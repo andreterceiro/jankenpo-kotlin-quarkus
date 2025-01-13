@@ -6,9 +6,13 @@ import kotlin.random.Random
 import jakarta.inject.Inject
 import io.quarkus.qute.Template
 import io.quarkus.qute.TemplateInstance
+import com.example.model.Jankenpo
 
 @Path("/jankenpo")
 class JankenpoResource {
+
+    @Inject
+    lateinit var jankenpo: Jankenpo
 
     @Inject
     lateinit var form: Template
@@ -17,7 +21,6 @@ class JankenpoResource {
     @Path("/play")
     @Produces(MediaType.TEXT_HTML)
     fun play(@QueryParam("playerMove") playerMove: String?): TemplateInstance {
-        val game = JankenpoGame()
         var error = ""
 
         // Validate the playerMove parameter
@@ -27,24 +30,18 @@ class JankenpoResource {
         }
 
         // Generate a random move for the computer
-        val computerMove = JankenpoGame.Move.values().random()
+        val computerMove = Jankenpo.Move.values().random()
 
         // Convert the player's move from string to enum
-        val player1Move: JankenpoGame.Move? = try {
-            JankenpoGame.Move.valueOf(playerMove.uppercase())
+        val player1Move: Jankenpo.Move = try {
+            Jankenpo.Move.valueOf(playerMove.uppercase())
         } catch (e: IllegalArgumentException) {
             error = "Invalid move. Please choose ROCK, PAPER, or SCISSORS."
             return form.data("error", error)
         }
 
-        // Ensure that player1Move is not null
-        if (player1Move == null) {
-            error = "Invalid move. Please choose ROCK, PAPER, or SCISSORS."
-            return form.data("error", error)
-        }
-
         // Determine the winner
-        val result = game.determineWinner(player1Move, computerMove)
+        val result = jankenpo.determineWinner(player1Move, computerMove)
 
         // Return the HTML template with the result
         return form
