@@ -17,6 +17,9 @@ class JankenpoResource {
     @Inject
     lateinit var form: Template
 
+    @Inject
+    lateinit var result: Template
+
     @GET
     @Produces(MediaType.TEXT_HTML)
     fun play(@QueryParam("playerMove") playerMove: String?): TemplateInstance {
@@ -40,11 +43,11 @@ class JankenpoResource {
         }
 
         // Determine the winner
-        val result = jankenpo.determineWinner(player1Move, computerMove)
+        val resultData = jankenpo.determineWinner(player1Move, computerMove)
 
         // Return the HTML template with the result
-        return form
-            .data("result", result)
+        return result
+            .data("result", resultData)
             .data("computerMove", computerMove)
             .data("playerMove", player1Move)
             .data("error", error)
