@@ -20,9 +20,16 @@ class JankenpoResource {
     @Inject
     lateinit var result: Template
 
+
     @GET
     @Produces(MediaType.TEXT_HTML)
-    fun play(@QueryParam("playerMove") playerMove: String?): TemplateInstance {
+    fun form(): TemplateInstance {
+        return form.instance();
+    }
+
+    @POST
+    @Produces(MediaType.TEXT_HTML)
+    fun result(@FormParam("playerMove") playerMove: String?): TemplateInstance {
         var error = ""
 
         // Validate the playerMove parameter
