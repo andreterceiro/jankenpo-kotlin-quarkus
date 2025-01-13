@@ -3,28 +3,54 @@ package com.example
 import jakarta.ws.rs.*
 import jakarta.ws.rs.core.MediaType
 import kotlin.random.Random
+import jakarta.inject.Inject
+import io.quarkus.qute.Template
+import io.quarkus.qute.TemplateInstance
 
 @Path("/jankenpo")
 class JankenpoResource {
 
+    @Inject
+    lateinit var form: Template
+
     @GET
     @Path("/play")
-    @Produces(MediaType.TEXT_PLAIN)
-    fun play(@QueryParam("playerMove") playerMove: String): String {
+    @Produces(MediaType.TEXT_HTML)
+    fun play(@QueryParam("playerMove") playerMove: String?): TemplateInstance {
         val game = JankenpoGame()
+        var error = ""
 
-        // Convert the player's move from string to enum
-        val player1Move = try {
-            JankenpoGame.Move.valueOf(playerMove.uppercase())
-        } catch (e: IllegalArgumentException) {
-            return "Invalid move. Please choose ROCK, PAPER, or SCISSORS."
+        // Validate the playerMove parameter
+        if (playerMove.isNullOrBlank()) {
+            error = "Please provide your move as ROCK, PAPER, or SCISSORS."
+            return form.data("error", error)
         }
 
         // Generate a random move for the computer
         val computerMove = JankenpoGame.Move.values().random()
 
+        // Convert the player's move from string to enum
+        val player1Move: JankenpoGame.Move? = try {
+            JankenpoGame.Move.valueOf(playerMove.uppercase())
+        } catch (e: IllegalArgumentException) {
+            error = "Invalid move. Please choose ROCK, PAPER, or SCISSORS."
+            return form.data("error", error)
+        }
+
+        // Ensure that player1Move is not null
+        if (player1Move == null) {
+            error = "Invalid move. Please choose ROCK, PAPER, or SCISSORS."
+            return form.data("error", error)
+        }
+
         // Determine the winner
         val result = game.determineWinner(player1Move, computerMove)
-        return "You chose $player1Move. Computer chose $computerMove. Result: $result"
+
+        // Return the HTML template with the result
+        return form
+            .data("result", result)
+            .data("computerMove", computerMove)
+            .data("playerMove", player1Move)
+            .data("error", error)
     }
 }
