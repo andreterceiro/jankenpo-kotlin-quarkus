@@ -33,3 +33,8 @@ Please adjust the value of the GET variable to contains one of these values:
 # Original README.md
 
 Please see [this file](./DEFAULT_README.md)
+
+
+# Changelog
+
+In [this link](https://changelog.md/jankenpo-kotlin-quarkus) we talk about the changelog of this project in http://changelog.md
